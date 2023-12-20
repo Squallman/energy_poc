@@ -1,0 +1,49 @@
+{
+  "table_name": "combined_ergw1000_data",
+  "mapping_config": {
+    "fid": "FID",
+    "erg_id": "erg_id",
+    "significance": "bedeutung",
+    "yield": "ergiebigke",
+    "extraction_rate_well": "entn_bru",
+    "extraction_rate_works": "entn_werk",
+    "rock_type": "gestein",
+    "shape_area": "Shape_STAr",
+    "shape_length": "Shape_STLe"
+  },
+  "input_entities": {
+    "bergbaugebiete": {
+      "blob_name": "ergw1000_bergbaugebiete__v1_poly.shp",
+      "geom_type": "Polygon"
+    },
+    "gwerg": {
+      "blob_name": "ergw1000_gwerg__v11_poly.shp",
+      "geom_type": "Polygon"
+    },
+    "gwerg_erg": {
+      "blob_name": "ergw1000_gwerg_erg_v11_poly.shp",
+      "geom_type": "Polygon"
+    },
+    "gwerg_gestein": {
+      "blob_name": "ergw1000_gwerg_gestein_v1_poly.shp",
+      "geom_type": "Polygon"
+    },
+    "uferfiltrat": {
+      "blob_name": "ergw1000_uferfiltrat__v1_line.shp",
+      "geom_type": "LineString"
+    }
+  },
+  "validation_rules": [
+    {
+      "action": "drop_null",
+      "column_name": "erg_id"
+    },
+    {
+      "action": "drop_duplicates"
+    },
+    {
+      "action": "convert_to_integer",
+      "column_name": "erg_id"
+    }
+  ]
+}

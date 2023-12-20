@@ -1,0 +1,39 @@
+version: 2
+
+sources:
+  - name: gis
+    database: gis
+    schema: public
+    tables:
+      - name: combined_ergw1000_data
+        description: "A table containing combined ERGW1000 data with spatial information."
+
+models:
+  - name: transformed_combined_ergw1000_data
+    description: "The transformed data from combined_ergw1000_data with additional calculations."
+    columns:
+      - name: fid
+        description: "Feature ID"
+
+      - name: erg_id
+        description: "Groundwater yield dataset ID"
+        tests:
+          - not_null
+
+      - name: significance
+        description: "Significance or importance of the groundwater resource"
+
+      - name: yield
+        description: "Yield or capacity of the groundwater resource"
+
+      - name: extraction_rate_well
+        description: "Potential extraction rate for individual wells"
+
+      - name: extraction_rate_works
+        description: "Potential extraction rate for waterworks"
+
+      - name: rock_type
+        description: "Type of groundwater-bearing rock"
+
+      - name: area_length_ratio
+        description: "Calculated field representing the ratio of area to length"

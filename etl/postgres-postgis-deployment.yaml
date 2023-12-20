@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-postgis
+  namespace: argo
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: postgres-postgis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-postgis
+  namespace: argo
+spec:
+  selector:
+    matchLabels:
+      app: postgres-postgis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres-postgis
+    spec:
+      containers:
+      - image: kartoza/postgis
+        name: postgis
+        env:
+        - name: POSTGRES_USER
+          value: "ergetl"
+        - name: POSTGRES_PASS
+          value: "ergetl"
+        ports:
+        - containerPort: 5432
+          name: postgres

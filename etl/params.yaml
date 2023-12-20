@@ -1,0 +1,8 @@
+account_url: "<account_url>"
+sas_token: "<sas_token>"
+container_name: "<container_name>"
+postgres_host: "postgres-postgis"
+postgres_port: "5432"
+postgres_user: "ergetl"
+postgres_password: "ergetl"
+postgres_db: "gis"

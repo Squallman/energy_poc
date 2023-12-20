@@ -1,0 +1,80 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: argoproj-etl
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+    - name: jsonContent
+      value: '{}'
+    - name: account_url
+    - name: sas_token
+    - name: container_name
+    - name: postgres_host
+    - name: postgres_port
+    - name: postgres_user
+    - name: postgres_password
+    - name: postgres_db
+
+  volumeClaimTemplates:
+    - metadata:
+        name: workdir
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+
+  templates:
+  - name: main
+    steps:
+    - - name: prepare-configuration-file
+        template: copy-json
+        arguments:
+          parameters:
+          - name: jsonContent
+            value: "{{workflow.parameters.jsonContent}}"
+
+    - - name: ergetl-script
+        template: python-script
+
+  - name: copy-json
+    inputs:
+      parameters:
+        - name: jsonContent
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args:
+        - >
+          echo "{{inputs.parameters.jsonContent}}" | base64 -d > /mnt/vol/config.json
+      volumeMounts:
+        - name: workdir
+          mountPath: /mnt/vol
+
+  - name: python-script
+    container:
+      image: squallman/ergetl:0.0.1
+      command: [python, -m, ergetl]
+      args: ["/mnt/vol/config.json"]
+      volumeMounts:
+        - name: workdir
+          mountPath: /mnt/vol
+      env:
+        - name: ACCOUNT_URL
+          value: "{{workflow.parameters.account_url}}"
+        - name: SAS_TOKEN
+          value: "{{workflow.parameters.sas_token}}"
+        - name: CONTAINER_NAME
+          value: "{{workflow.parameters.container_name}}"
+        - name: POSTGRES_HOST
+          value: "{{workflow.parameters.postgres_host}}"
+        - name: POSTGRES_PORT
+          value: "{{workflow.parameters.postgres_port}}"
+        - name: POSTGRES_USER
+          value: "{{workflow.parameters.postgres_user}}"
+        - name: POSTGRES_PASSWORD
+          value: "{{workflow.parameters.postgres_password}}"
+        - name: POSTGRES_DB
+          value: "{{workflow.parameters.postgres_db}}"

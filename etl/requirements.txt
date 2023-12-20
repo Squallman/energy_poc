@@ -1,0 +1,6 @@
+geopandas==0.14.1
+sqlalchemy==2.0.23
+matplotlib==3.8.2
+psycopg2-binary==2.9.9
+geoalchemy2==0.14.2
+azure-storage-blob==12.19.0
